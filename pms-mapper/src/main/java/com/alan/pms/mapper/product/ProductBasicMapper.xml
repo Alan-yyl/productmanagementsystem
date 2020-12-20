@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alan.pms.mapper.product.ProductBasicMapper">
+    <resultMap id="BaseResultMap" type="com.alan.pms.model.ProductBasicInformation">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result column="pid" property="pid" jdbcType="VARCHAR"></result>
+        <result column="p_name" property="pName" jdbcType="VARCHAR"></result>
+        <result column="price" property="price" jdbcType="VARCHAR"></result>
+        <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE"></result>
+        <result column="stock" property="stock" jdbcType="VARCHAR"></result>
+        <result column="type" property="type" jdbcType="VARCHAR"></result>
+        <result column="shop" property="shop" jdbcType="VARCHAR"></result>
+        <result column="image" property="image" jdbcType="VARCHAR"></result>
+        <result column="p_address" property="pAddress" jdbcType="VARCHAR"></result>
+        <result column="storage_time" property="storageTime" jdbcType="TIMESTAMP"></result>
+    </resultMap>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        select id,pid,p_name,price,purchase_price,stock,sale,storage_time,type,shop,image,p_address
+        from `common_product_basic_information` cpbi
+        where 1=1
+        <if test="timeRange!=null">
+            and cpbi.storage_time between #{timeRange[0]} and #{timeRange[1]}
+        </if>
+        <if test="product!=null">
+            <if test="product.pName!=null">
+                and cpbi.p_name like "%"#{product.pName}"%"
+            </if>
+            <if test="product.id!=null">
+                and cpbi.id like "%"#{product.id}"%"
+            </if>
+            <if test="product.pid!=null">
+                and cpbi.pid like "%"#{product.pid}"%"
+            </if>
+            <if test="product.price!=null">
+                and cpbi.price like "%"#{product.price}"%"
+            </if>
+            <if test="product.purchasePrice!=null">
+                and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
+            </if>
+            <if test="product.type!=null">
+                and cpbi.type like "%"#{product.type}"%"
+            </if>
+            <if test="product.shop!=null">
+                and cpbi.shop like "%"#{product.shop}"%"
+            </if>
+            <if test="product.image!=null">
+                and cpbi.image like "%"#{product.image}"%"
+            </if>
+            <if test="product.pAddress!=null">
+                and cpbi.p_address like "%"#{product.pAddress}"%"
+            </if>
+            <if test="product.stock!=null">
+                order by cpbi.stock ${product.stock}
+            </if>
+        </if>
+        <if test="searchValue!=null">
+            and cpbi.p_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
+            "%"#{searchValue}"%"
+        </if>
+        <if test="pageNum !=null and pageSize !=null">
+            limit #{pageNum},#{pageSize}
+        </if>
+    </select>
+
+    <select id="findTotal" resultType="java.lang.Long">
+        select count(1)
+        from `common_product_basic_information` cpbi
+    </select>
+
+    <select id="findTotalWithCondition" resultType="java.lang.Long">
+        select count(1)
+        from `common_product_basic_information` cpbi
+        where 1=1
+        <if test="product!=null">
+            <if test="product.pName!=null">
+                and cpbi.p_name like "%"#{product.pName}"%"
+            </if>
+            <if test="product.id!=null">
+                and cpbi.id like "%"#{product.id}"%"
+            </if>
+            <if test="product.pid!=null">
+                and cpbi.pid like "%"#{product.pid}"%"
+            </if>
+            <if test="product.price!=null">
+                and cpbi.price like "%"#{product.price}"%"
+            </if>
+            <if test="product.purchasePrice!=null">
+                and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
+            </if>
+            <if test="product.type!=null">
+                and cpbi.type like "%"#{product.type}"%"
+            </if>
+            <if test="product.shop!=null">
+                and cpbi.shop like "%"#{product.shop}"%"
+            </if>
+            <if test="product.image!=null">
+                and cpbi.image like "%"#{product.image}"%"
+            </if>
+            <if test="product.pAddress!=null">
+                and cpbi.p_address like "%"#{product.pAddress}"%"
+            </if>
+        </if>
+        <if test="timeRange!=null">
+            and cpbi.storage_time between #{timeRange[0]} and #{timeRange[1]}
+        </if>
+        <if test="searchValue!=null">
+            and cpbi.p_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
+            "%"#{searchValue}"%"
+        </if>
+    </select>
+</mapper>
