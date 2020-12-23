@@ -21,9 +21,7 @@ class PmsWebApplicationTests {
 	@Test
 	void testFindData(){
 		ProductBasicInformation information = new ProductBasicInformation();
-		information.setId(1);
-		// System.out.println(productBasicController.getAllProductBasic(1,10,information));
-
+		System.out.println(information);
 	}
 
 }

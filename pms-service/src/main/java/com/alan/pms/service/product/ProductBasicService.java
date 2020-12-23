@@ -2,8 +2,6 @@ package com.alan.pms.service.product;
 
 import com.alan.pms.model.*;
 
-import java.sql.Timestamp;
-import java.util.List;
 
 
 /**
@@ -20,4 +18,25 @@ public interface ProductBasicService {
      * @return 返回分页结果
      */
     ResponseBean<ResponsePageBean> getProductInformationByPage(Integer pageNum, Integer pageSize, ProductBasicInformation product, String searchValue, String[] timeRange);
+
+    /**
+     * 通过ID查询ProductBasicInformation
+     * @param id 数据库中的id字段
+     * @return
+     */
+    ResponseBean<ProductBasicInformation> findProductById(String id);
+
+    /**
+     * 通过ID删除ProductBasicInformation
+     * @param id 数据库中的id字段
+     * @return 统一响应实体
+     */
+    ResponseBean<String> deleteById(String id);
+
+    /**
+     * 插入ProductBasicInformation信息
+     * @param product ProductBasicInformation实体类
+     * @return 统一响应实体
+     */
+    ResponseBean<String> insertOrUpdateProduct(ProductBasicInformation product);
 }

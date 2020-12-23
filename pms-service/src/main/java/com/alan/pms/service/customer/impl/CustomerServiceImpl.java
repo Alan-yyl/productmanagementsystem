@@ -1,10 +1,10 @@
-package com.alan.pms.service.product.impl;
+package com.alan.pms.service.customer.impl;
 
-import com.alan.pms.model.ProductBasicInformation;
+import com.alan.pms.model.Customer;
 import com.alan.pms.model.ResponseBean;
 import com.alan.pms.model.ResponsePageBean;
-import com.alan.pms.service.product.ProductBasicService;
 import com.alan.pms.service.base.MapperBase;
+import com.alan.pms.service.customer.CustomerService;
 import com.alan.pms.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +16,23 @@ import java.util.List;
  * @date 2020/12/19 12:40
  */
 @Service
-public class ProductBasicServiceImpl extends MapperBase implements ProductBasicService {
+public class CustomerServiceImpl extends MapperBase implements CustomerService {
     @Override
-    public ResponseBean<ResponsePageBean> getProductInformationByPage(Integer pageNum, Integer pageSize, ProductBasicInformation product, String searchValue, String[] timeRange) {
+    public ResponseBean<ResponsePageBean> getCustomerByPage(Integer pageNum, Integer pageSize, Customer customer, String searchValue) {
         ResponseBean<ResponsePageBean> responseBean = new ResponseBean();
-        Long total=productBasicMapper.findTotalWithCondition(product,searchValue,timeRange);
+        Long total=customerMapper.findTotalWithCondition(customer,searchValue,null);
         if (total>=0){
             //总数
-            ResponsePageBean<ProductBasicInformation> pageBean = new ResponsePageBean<>();
+            ResponsePageBean<Customer> pageBean = new ResponsePageBean<>();
             pageBean.setTotal(total);
             //数据
             pageNum=(pageNum-1)*pageSize;
             //提前拼接searchValue
-            List<ProductBasicInformation> list=productBasicMapper.findAll(pageNum,pageSize,product,searchValue,timeRange);
+            List<Customer> list=customerMapper.findAll(pageNum,pageSize,customer,searchValue,null);
             //构造响应信息
             pageBean.setDataList(list);
             responseBean.setStatusCode(200);
-            responseBean.setMsg("分页查询ProductBasicInformation成功");
+            responseBean.setMsg("分页查询Customer成功");
             responseBean.setIsFlag(true);
             responseBean.setData(pageBean);
         }else{
@@ -46,14 +46,14 @@ public class ProductBasicServiceImpl extends MapperBase implements ProductBasicS
     }
 
     @Override
-    public ResponseBean<ProductBasicInformation> findProductById(String id) {
-        ResponseBean<ProductBasicInformation> responseBean = new ResponseBean<>();
-        ProductBasicInformation product = productBasicMapper.findById(id);
-        if (product!=null){
+    public ResponseBean<Customer> findCustomerById(String id) {
+        ResponseBean<Customer> responseBean = new ResponseBean<>();
+        Customer customer = customerMapper.findById(id);
+        if (customer!=null){
             responseBean.setIsFlag(true);
-            responseBean.setMsg("findProductById查询成功");
+            responseBean.setMsg("findCustomerById查询成功");
             responseBean.setStatusCode(200);
-            responseBean.setData(product);
+            responseBean.setData(customer);
         }else{
             responseBean.setIsFlag(false);
             responseBean.setMsg("未查询到id="+id+"的信息");
@@ -70,7 +70,7 @@ public class ProductBasicServiceImpl extends MapperBase implements ProductBasicS
             responseBean.setIsFlag(false);
             responseBean.setMsg("删除id="+id+"的数据失败，id为空");
             responseBean.setStatusCode(500);
-        }if (productBasicMapper.deleteById(id)>0){
+        }if (customerMapper.deleteById(id)>0){
             responseBean.setIsFlag(true);
             responseBean.setMsg("成功删除id="+id+"的数据");
             responseBean.setStatusCode(200);
@@ -84,10 +84,10 @@ public class ProductBasicServiceImpl extends MapperBase implements ProductBasicS
     }
 
     @Override
-    public ResponseBean<String> insertOrUpdateProduct(ProductBasicInformation product) {
+    public ResponseBean<String> insertOrUpdateCustomer(Customer customer) {
         ResponseBean<String> responseBean = new ResponseBean<>();
-        if (product!=null){
-            if (productBasicMapper.insertOrUpdate(product)>0){
+        if (customer!=null){
+            if (customerMapper.insertOrUpdate(customer)>0){
                 responseBean.setIsFlag(true);
                 responseBean.setMsg("商品信息插入/更新成功");
                 responseBean.setStatusCode(200);

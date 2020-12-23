@@ -1,6 +1,5 @@
 package com.alan.pms.mapper.base;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -22,8 +21,9 @@ public interface MapperBase<T> {
 
     /**
      * 查询符合T的记录总数
-     * @param basicBean
+     * @param basicBean T
      * @param searchValue 搜索框的值
+     * @param timeRange 时间范围
      * @return
      */
     Long findTotalWithCondition(T basicBean,String searchValue,String[] timeRange);
@@ -33,4 +33,25 @@ public interface MapperBase<T> {
      * @return
      */
     Long findTotal() ;
+
+    /**
+     * 通过ID查询数据
+     * @param id
+     * @return
+     */
+    T findById(String id);
+
+    /**
+     * 通过ID删除数据
+     * @param id
+     * @return
+     */
+    Integer deleteById(String id);
+
+    /**
+     * 插入/更新T
+     * @param basicBean
+     * @return
+     */
+    Integer insertOrUpdate(T basicBean);
 }

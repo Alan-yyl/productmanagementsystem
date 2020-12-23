@@ -4,7 +4,6 @@ import com.alan.pms.mapper.base.MapperBase;
 import com.alan.pms.model.*;
 import org.apache.ibatis.annotations.Param;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -33,4 +32,28 @@ public interface ProductBasicMapper extends MapperBase<ProductBasicInformation> 
      */
     @Override
     Long findTotalWithCondition(ProductBasicInformation product, String searchValue,String[] timeRange);
+
+    /**
+     *  通过ID查询ProductBasicInformation
+     * @param id
+     * @return
+     */
+    @Override
+    ProductBasicInformation findById(String id);
+
+    /**
+     * 通过ID删除ProductBasicInformation
+     * @param id
+     * @return
+     */
+    @Override
+    Integer deleteById(String id);
+
+    /**
+     * 向表中插入/更新数据
+     * @param product
+     * @return
+     */
+    @Override
+    Integer insertOrUpdate(@Param("product") ProductBasicInformation product);
 }

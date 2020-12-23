@@ -7,27 +7,35 @@
     <resultMap id="BaseResultMap" type="com.alan.pms.model.ProductBasicInformation">
         <id column="id" property="id" jdbcType="INTEGER"></id>
         <result column="pid" property="pid" jdbcType="VARCHAR"></result>
-        <result column="p_name" property="pName" jdbcType="VARCHAR"></result>
+        <result column="product_Name" property="productName" jdbcType="VARCHAR"></result>
         <result column="price" property="price" jdbcType="VARCHAR"></result>
         <result column="purchase_price" property="purchasePrice" jdbcType="DOUBLE"></result>
         <result column="stock" property="stock" jdbcType="VARCHAR"></result>
         <result column="type" property="type" jdbcType="VARCHAR"></result>
         <result column="shop" property="shop" jdbcType="VARCHAR"></result>
         <result column="image" property="image" jdbcType="VARCHAR"></result>
-        <result column="p_address" property="pAddress" jdbcType="VARCHAR"></result>
+        <result column="product_Address" property="productAddress" jdbcType="VARCHAR"></result>
         <result column="storage_time" property="storageTime" jdbcType="TIMESTAMP"></result>
     </resultMap>
 
-    <select id="findAll" resultMap="BaseResultMap">
-        select id,pid,p_name,price,purchase_price,stock,sale,storage_time,type,shop,image,p_address
+    <sql id="BaseSql">
+        select id,pid,product_name,price,purchase_price,stock,sale,storage_time,type,shop,image,product_address
         from `common_product_basic_information` cpbi
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        <include refid="BaseSql"></include>
         where 1=1
         <if test="timeRange!=null">
             and cpbi.storage_time between #{timeRange[0]} and #{timeRange[1]}
         </if>
+        <if test="searchValue!=null">
+            and cpbi.product_name like #{searchValue}"%" or cpbi.type like #{searchValue}"%" or cpbi.shop like
+            "%"#{searchValue}"%"
+        </if>
         <if test="product!=null">
-            <if test="product.pName!=null">
-                and cpbi.p_name like "%"#{product.pName}"%"
+            <if test="product.productName!=null">
+                and cpbi.product_name like #{product.productName}"%"
             </if>
             <if test="product.id!=null">
                 and cpbi.id like "%"#{product.id}"%"
@@ -42,7 +50,7 @@
                 and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
             </if>
             <if test="product.type!=null">
-                and cpbi.type like "%"#{product.type}"%"
+                and cpbi.type like #{product.type}"%"
             </if>
             <if test="product.shop!=null">
                 and cpbi.shop like "%"#{product.shop}"%"
@@ -50,16 +58,15 @@
             <if test="product.image!=null">
                 and cpbi.image like "%"#{product.image}"%"
             </if>
-            <if test="product.pAddress!=null">
-                and cpbi.p_address like "%"#{product.pAddress}"%"
+            <if test="product.productAddress!=null">
+                and cpbi.product_address like "%"#{product.productAddress}"%"
             </if>
             <if test="product.stock!=null">
-                order by cpbi.stock ${product.stock}
+                order by storage_time desc,cpbi.stock ${product.stock}
             </if>
-        </if>
-        <if test="searchValue!=null">
-            and cpbi.p_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
-            "%"#{searchValue}"%"
+            <if test="product.stock==null">
+                order by storage_time desc
+            </if>
         </if>
         <if test="pageNum !=null and pageSize !=null">
             limit #{pageNum},#{pageSize}
@@ -76,8 +83,8 @@
         from `common_product_basic_information` cpbi
         where 1=1
         <if test="product!=null">
-            <if test="product.pName!=null">
-                and cpbi.p_name like "%"#{product.pName}"%"
+            <if test="product.productName!=null">
+                and cpbi.product_name like #{product.productName}"%"
             </if>
             <if test="product.id!=null">
                 and cpbi.id like "%"#{product.id}"%"
@@ -92,7 +99,7 @@
                 and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
             </if>
             <if test="product.type!=null">
-                and cpbi.type like "%"#{product.type}"%"
+                and cpbi.type like #{product.type}"%"
             </if>
             <if test="product.shop!=null">
                 and cpbi.shop like "%"#{product.shop}"%"
@@ -100,16 +107,32 @@
             <if test="product.image!=null">
                 and cpbi.image like "%"#{product.image}"%"
             </if>
-            <if test="product.pAddress!=null">
-                and cpbi.p_address like "%"#{product.pAddress}"%"
+            <if test="product.productAddress!=null">
+                and cpbi.product_address like "%"#{product.productAddress}"%"
             </if>
         </if>
         <if test="timeRange!=null">
             and cpbi.storage_time between #{timeRange[0]} and #{timeRange[1]}
         </if>
         <if test="searchValue!=null">
-            and cpbi.p_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
+            and cpbi.product_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
             "%"#{searchValue}"%"
         </if>
     </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        <include refid="BaseSql"></include>
+        where cpbi.id=#{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from `common_product_basic_information`
+        where id=#{id}
+    </delete>
+    
+    <insert id="insertOrUpdate">
+        insert into `common_product_basic_information` (id,product_name,price,purchase_price,stock,sale,storage_time,type,shop,image,product_address)
+        values (#{product.id},#{product.productName},#{product.price},#{product.purchasePrice},#{product.stock},#{product.sale},#{product.storageTime},#{product.type},#{product.shop},#{product.image},#{product.productAddress})
+        on duplicate key update  product_name=#{product.productName},type=#{product.type},price=#{product.price},purchase_price=#{product.purchasePrice},stock=#{product.stock},sale=#{product.sale},storage_time=#{product.storageTime},shop=#{product.shop},image=#{product.image},product_address=#{product.productAddress}
+    </insert>
 </mapper>
