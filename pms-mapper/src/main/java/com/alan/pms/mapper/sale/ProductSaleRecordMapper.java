@@ -64,4 +64,9 @@ public interface ProductSaleRecordMapper extends MapperBase<ProductSaleRecord> {
      */
     Integer updateSaleRecord(@Param("saleRecord") ProductSaleRecord saleRecord);
 
+    /**
+     * 销售实时数据
+     * @return
+     */
+    List<Map<String,String>> saleRecordRealTimeData();
 }

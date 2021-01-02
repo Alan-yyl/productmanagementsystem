@@ -1,5 +1,6 @@
 package com.alan.pms.service.base;
 
+import com.alan.pms.mapper.authority.LoginMapper;
 import com.alan.pms.mapper.customer.CustomerMapper;
 import com.alan.pms.mapper.product.ProductBasicMapper;
 import com.alan.pms.mapper.sale.ProductSaleRecordMapper;
@@ -17,4 +18,6 @@ public abstract class MapperBase {
     public CustomerMapper customerMapper;
     @Autowired
     public ProductSaleRecordMapper productSaleRecordMapper;
+    @Autowired
+    public LoginMapper loginMapper;
 }

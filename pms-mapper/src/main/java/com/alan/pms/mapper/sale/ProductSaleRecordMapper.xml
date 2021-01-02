@@ -17,6 +17,7 @@
         <result column="id" property="id" jdbcType="INTEGER"></result>
         <result column="total" property="total" jdbcType="DOUBLE"></result>
         <result column="count" property="count" jdbcType="INTEGER"></result>
+        <result column="update_time" property="saleTime" jdbcType="TIMESTAMP" javaType="String"></result>
         <result column="sale_time" property="saleTime" jdbcType="TIMESTAMP" javaType="String"></result>
         <result column="person_name" property="customerName" jdbcType="VARCHAR"></result>
         <result column="product_name" property="productName" jdbcType="VARCHAR"></result>
@@ -24,14 +25,21 @@
         <result column="product_id" property="productId" jdbcType="VARCHAR"></result>
     </resultMap>
 
+    <resultMap id="saleRecordRealTimeDataMap" type="java.util.Map">
+        <result column="sum" property="sum" jdbcType="VARCHAR"></result>
+        <result column="total" property="total" jdbcType="VARCHAR"></result>
+        <result column="date" property="date" jdbcType="VARCHAR"></result>
+    </resultMap>
+
     <sql id="BaseSql">
         select id,total,count,sale_time,customer_id,product_name
         from `product_sale_record` psr
     </sql>
 
+
     <select id="queryAll" resultMap="RecordMap" parameterType="java.util.Map">
-        SELECT temp.id,temp.total,temp.count,temp.sale_time,temp.person_name,cpbi.product_name,temp.product_id,temp.person_id
-        FROM(SELECT id,total,count,sale_time,cbi.person_name person_name,product_id,cbi.person_id person_id
+        SELECT temp.id,temp.total,temp.count,temp.sale_time,temp.person_name,cpbi.product_name,temp.product_id,temp.person_id,temp.update_time
+        FROM(SELECT id,total,count,sale_time,cbi.person_name person_name,product_id,cbi.person_id person_id,psr.update_time update_time
         FROM `product_sale_record` psr
         INNER JOIN `customer_basic_infomation` cbi
         ON psr.customer_id=cbi.person_id) temp
@@ -39,7 +47,7 @@
         on cpbi.id=temp.product_id
         where 1=1
         <if test="searchValue!=null">
-            and cpbi.product_name like #{searchValue}"%" or temp.person_name like #{searchValue}"%"
+            and cpbi.product_name like "%"#{searchValue}"%" or temp.person_name like "%"#{searchValue}"%"
         </if>
         <if test="saleRecordMap!=null">
             <if test="saleRecordMap.productName!=null">
@@ -52,6 +60,7 @@
         <if test="timeRange!=null">
             and temp.sale_time between #{timeRange[0]} and #{timeRange[1]}
         </if>
+            order by temp.update_time desc
         <if test="pageNum !=null and pageSize !=null">
             limit #{pageNum},#{pageSize}
         </if>
@@ -72,7 +81,7 @@
         on cpbi.id=temp.product_id
         where 1=1
         <if test="searchValue!=null">
-            and cpbi.product_name like #{searchValue}"%" or temp.person_name like #{searchValue}"%"
+            and cpbi.product_name like "%"#{searchValue}"%" or temp.person_name like "%"#{searchValue}"%"
         </if>
         <if test="saleRecordMap!=null">
             <if test="saleRecordMap.productName!=null">
@@ -119,4 +128,12 @@
         </if>
         where id=#{saleRecord.id}
     </insert>
+
+    <select id="saleRecordRealTimeData" parameterType="java.util.Map" resultMap="saleRecordRealTimeDataMap">
+        SELECT ROUND(SUM(total),2) sum,SUM(count) count,DATE_FORMAT(sale_time,'%Y-%m-%d') date
+        FROM `product_sale_record`
+        GROUP BY date
+        order by date desc
+        limit 31
+    </select>
 </mapper>

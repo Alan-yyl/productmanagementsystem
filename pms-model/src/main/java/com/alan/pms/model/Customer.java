@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
-    private String personId;
+    private Integer personId;
     private String personName;
     private String address;
 }

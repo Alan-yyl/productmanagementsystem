@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.alan.pms.mapper.authority.LoginMapper">
+    <select id="doLogin" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT EXISTS(SELECT 1
+        FROM `common_administrator`
+        WHERE username=#{loginForm.username} AND password =#{loginForm.password})
+    </select>
+</mapper>

@@ -30,12 +30,12 @@
             and cpbi.storage_time between #{timeRange[0]} and #{timeRange[1]}
         </if>
         <if test="searchValue!=null">
-            and cpbi.product_name like #{searchValue}"%" or cpbi.type like #{searchValue}"%" or cpbi.shop like
+            and cpbi.product_name like "%"#{searchValue}"%" or cpbi.type like "%"#{searchValue}"%" or cpbi.shop like
             "%"#{searchValue}"%"
         </if>
         <if test="product!=null">
             <if test="product.productName!=null">
-                and cpbi.product_name like #{product.productName}"%"
+                and cpbi.product_name like "%"#{product.productName}"%"
             </if>
             <if test="product.id!=null">
                 and cpbi.id like "%"#{product.id}"%"
@@ -50,7 +50,7 @@
                 and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
             </if>
             <if test="product.type!=null">
-                and cpbi.type like #{product.type}"%"
+                and cpbi.type like "%"#{product.type}"%"
             </if>
             <if test="product.shop!=null">
                 and cpbi.shop like "%"#{product.shop}"%"
@@ -62,10 +62,10 @@
                 and cpbi.product_address like "%"#{product.productAddress}"%"
             </if>
             <if test="product.stock!=null">
-                order by storage_time desc,cpbi.stock ${product.stock}
+                order by cpbi.stock ${product.stock}
             </if>
             <if test="product.stock==null">
-                order by storage_time desc
+                order by update_time desc
             </if>
         </if>
         <if test="pageNum !=null and pageSize !=null">
@@ -84,7 +84,7 @@
         where 1=1
         <if test="product!=null">
             <if test="product.productName!=null">
-                and cpbi.product_name like #{product.productName}"%"
+                and cpbi.product_name like "%"#{product.productName}"%"
             </if>
             <if test="product.id!=null">
                 and cpbi.id like "%"#{product.id}"%"
@@ -99,7 +99,7 @@
                 and cpbi.purchase_price like "%"#{product.purchasePrice}"%"
             </if>
             <if test="product.type!=null">
-                and cpbi.type like #{product.type}"%"
+                and cpbi.type like "%"#{product.type}"%"
             </if>
             <if test="product.shop!=null">
                 and cpbi.shop like "%"#{product.shop}"%"
@@ -131,8 +131,8 @@
     </delete>
     
     <insert id="insertOrUpdate">
-        insert into `common_product_basic_information` (id,product_name,price,purchase_price,stock,sale,storage_time,type,shop,image,product_address)
-        values (#{product.id},#{product.productName},#{product.price},#{product.purchasePrice},#{product.stock},#{product.sale},#{product.storageTime},#{product.type},#{product.shop},#{product.image},#{product.productAddress})
-        on duplicate key update  product_name=#{product.productName},type=#{product.type},price=#{product.price},purchase_price=#{product.purchasePrice},stock=#{product.stock},sale=#{product.sale},storage_time=#{product.storageTime},shop=#{product.shop},image=#{product.image},product_address=#{product.productAddress}
+        insert into `common_product_basic_information` (id,product_name,price,purchase_price,stock,sale,storage_time,type,shop,image,product_address,update_time)
+        values (#{product.id},#{product.productName},#{product.price},#{product.purchasePrice},#{product.stock},#{product.sale},#{product.storageTime},#{product.type},#{product.shop},#{product.image},#{product.productAddress},now())
+        on duplicate key update  product_name=#{product.productName},type=#{product.type},price=#{product.price},purchase_price=#{product.purchasePrice},stock=#{product.stock},sale=#{product.sale},storage_time=#{product.storageTime},shop=#{product.shop},image=#{product.image},product_address=#{product.productAddress},update_time=now()
     </insert>
 </mapper>

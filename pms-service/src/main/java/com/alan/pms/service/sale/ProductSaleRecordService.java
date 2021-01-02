@@ -4,6 +4,7 @@ import com.alan.pms.model.ProductSaleRecord;
 import com.alan.pms.model.ResponseBean;
 import com.alan.pms.model.ResponsePageBean;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -29,7 +30,7 @@ public interface ProductSaleRecordService {
      * @param id 数据库中的id字段
      * @return
      */
-    ResponseBean< Map<String,Object>> findProductSaleRecordById(String id);
+    ResponseBean<Map<String,Object>> findProductSaleRecordById(String id);
 
     /**
      * 通过ID删除ProductSaleRecord
@@ -44,4 +45,10 @@ public interface ProductSaleRecordService {
      * @return 统一响应实体
      */
     ResponseBean<String> updateProductSaleRecord(ProductSaleRecord productSaleRecord);
+
+    /**
+     * 获取销售实时数据
+     * @return
+     */
+    ResponseBean<List<Map<String,String>>> saleRecordRealTimeData();
 }

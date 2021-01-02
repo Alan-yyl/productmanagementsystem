@@ -104,4 +104,22 @@ public class ProductSaleRecordServiceImpl extends MapperBase implements ProductS
         }
         return responseBean;
     }
+
+    @Override
+    public ResponseBean<List<Map<String, String>>> saleRecordRealTimeData() {
+        ResponseBean<List<Map<String, String>>> responseBean = new ResponseBean<>();
+        List<Map<String,String>> list=productSaleRecordMapper.saleRecordRealTimeData();
+        if (list!=null&&list.size()!=0) {
+            responseBean.setData(list);
+            responseBean.setMsg("实时数据获取成功");
+            responseBean.setStatusCode(200);
+            responseBean.setIsFlag(true);
+        }else {
+            responseBean.setData(null);
+            responseBean.setMsg("实时数据获取失败");
+            responseBean.setStatusCode(500);
+            responseBean.setIsFlag(false);
+        }
+        return responseBean;
+    }
 }

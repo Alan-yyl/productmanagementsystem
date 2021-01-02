@@ -5,7 +5,7 @@
 
 <mapper namespace="com.alan.pms.mapper.customer.CustomerMapper">
     <resultMap id="BaseResultMap" type="com.alan.pms.model.Customer">
-        <result column="person_id" property="personId" jdbcType="VARCHAR"></result>
+        <result column="person_id" property="personId" jdbcType="INTEGER"></result>
         <result column="person_name" property="personName" jdbcType="VARCHAR"></result>
         <result column="address" property="address" jdbcType="VARCHAR"></result>
     </resultMap>
@@ -19,11 +19,11 @@
         <include refid="BaseSql"></include>
         where 1=1
         <if test="searchValue!=null">
-            and cbi.person_name like #{searchValue}"%" or cbi.address like "%"#{searchValue}"%"
+            and cbi.person_name like "%"#{searchValue}"%" or cbi.address like "%"#{searchValue}"%"
         </if>
         <if test="customer!=null">
             <if test="customer.personName!=null">
-                and cbi.person_name like #{customer.personName}"%"
+                and cbi.person_name like "%"#{customer.personName}"%"
             </if>
             <if test="customer.address!=null">
                 and cbi.address like "%"#{customer.address}"%"
@@ -44,11 +44,11 @@
         from `customer_basic_infomation` cbi
         where 1=1
         <if test="searchValue!=null">
-            and cbi.person_name like #{searchValue}"%" or cbi.address like "%"#{searchValue}"%"
+            and cbi.person_name like "%"#{searchValue}"%" or cbi.address like "%"#{searchValue}"%"
         </if>
         <if test="customer!=null">
             <if test="customer.personName!=null">
-                and cbi.person_name like #{customer.personName}"%"
+                and cbi.person_name like "%"#{customer.personName}"%"
             </if>
             <if test="customer.address!=null">
                 and cbi.address like "%"#{customer.address}"%"
@@ -69,6 +69,6 @@
     <insert id="insertOrUpdate">
         insert into `customer_basic_infomation` (person_id,person_name,address)
         values (#{customer.personId},#{customer.personName},#{customer.address})
-        on duplicate key update  person_id=#{customer.personId},person_name=#{customer.personName},address=#{customer.address}
+        on duplicate key update person_name=#{customer.personName},address=#{customer.address}
     </insert>
 </mapper>

@@ -7,6 +7,7 @@ import com.alan.pms.service.sale.ProductSaleRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,6 +56,13 @@ public class ProductSaleRecordController {
     @PostMapping("/update")
     public ResponseBean<String> updateProductSaleRecord(@RequestBody ProductSaleRecord saleRecord){
         return productSaleRecordService.updateProductSaleRecord(saleRecord);
+    }
+
+
+    @ResponseBody
+    @GetMapping("/saleRecordRealTimeData")
+    public ResponseBean<List<Map<String,String>>> getSaleRecordRealTimeData(){
+        return productSaleRecordService.saleRecordRealTimeData();
     }
 }
 
